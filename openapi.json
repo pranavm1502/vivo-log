@@ -1,0 +1,2479 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Vivo-Log API",
+    "description": "Preclinical In-Vivo Study and Mouse Colony Tracking",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/colony/genotypes": {
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "List Genotypes",
+        "operationId": "list_genotypes_api_v1_colony_genotypes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GenotypeRead"
+                  },
+                  "type": "array",
+                  "title": "Response List Genotypes Api V1 Colony Genotypes Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Create Genotype",
+        "operationId": "create_genotype_api_v1_colony_genotypes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenotypeCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenotypeRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/genotypes/{genotype_id}": {
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Get Genotype",
+        "operationId": "get_genotype_api_v1_colony_genotypes__genotype_id__get",
+        "parameters": [
+          {
+            "name": "genotype_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Genotype Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenotypeRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Update Genotype",
+        "operationId": "update_genotype_api_v1_colony_genotypes__genotype_id__patch",
+        "parameters": [
+          {
+            "name": "genotype_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Genotype Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenotypeUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenotypeRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Delete Genotype",
+        "operationId": "delete_genotype_api_v1_colony_genotypes__genotype_id__delete",
+        "parameters": [
+          {
+            "name": "genotype_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Genotype Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/cages": {
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "List Cages",
+        "operationId": "list_cages_api_v1_colony_cages_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CageRead"
+                  },
+                  "type": "array",
+                  "title": "Response List Cages Api V1 Colony Cages Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Create Cage",
+        "operationId": "create_cage_api_v1_colony_cages_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CageCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CageRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/cages/{cage_id}": {
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Get Cage",
+        "operationId": "get_cage_api_v1_colony_cages__cage_id__get",
+        "parameters": [
+          {
+            "name": "cage_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cage Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CageRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Update Cage",
+        "operationId": "update_cage_api_v1_colony_cages__cage_id__patch",
+        "parameters": [
+          {
+            "name": "cage_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cage Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CageUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CageRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Delete Cage",
+        "operationId": "delete_cage_api_v1_colony_cages__cage_id__delete",
+        "parameters": [
+          {
+            "name": "cage_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cage Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/mice": {
+      "post": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Create Mouse",
+        "operationId": "create_mouse_api_v1_colony_mice_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MouseCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MouseRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "List Mice",
+        "operationId": "list_mice_api_v1_colony_mice_get",
+        "parameters": [
+          {
+            "name": "genotype_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Genotype Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MouseStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MouseRead"
+                  },
+                  "title": "Response List Mice Api V1 Colony Mice Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/mice/{mouse_id}": {
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Get Mouse",
+        "operationId": "get_mouse_api_v1_colony_mice__mouse_id__get",
+        "parameters": [
+          {
+            "name": "mouse_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mouse Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MouseRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Update Mouse",
+        "operationId": "update_mouse_api_v1_colony_mice__mouse_id__patch",
+        "parameters": [
+          {
+            "name": "mouse_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mouse Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MouseUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MouseRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Delete Mouse",
+        "operationId": "delete_mouse_api_v1_colony_mice__mouse_id__delete",
+        "parameters": [
+          {
+            "name": "mouse_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mouse Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/mice/{mouse_id}/lineage": {
+      "put": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Assign Lineage",
+        "operationId": "assign_lineage_api_v1_colony_mice__mouse_id__lineage_put",
+        "parameters": [
+          {
+            "name": "mouse_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mouse Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LineageAssign"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MouseRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/mice/{mouse_id}/cage": {
+      "put": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Assign Cage",
+        "operationId": "assign_cage_api_v1_colony_mice__mouse_id__cage_put",
+        "parameters": [
+          {
+            "name": "mouse_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mouse Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CageAssign"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MouseRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/colony/mice/{mouse_id}/pedigree": {
+      "get": {
+        "tags": [
+          "Colony"
+        ],
+        "summary": "Get Pedigree",
+        "operationId": "get_pedigree_api_v1_colony_mice__mouse_id__pedigree_get",
+        "parameters": [
+          {
+            "name": "mouse_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mouse Id"
+            }
+          },
+          {
+            "name": "depth",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 5,
+              "minimum": 1,
+              "default": 3,
+              "title": "Depth"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedigreeNode"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "List Studies",
+        "operationId": "list_studies_api_v1_studies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StudyRead"
+                  },
+                  "type": "array",
+                  "title": "Response List Studies Api V1 Studies Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Create Study",
+        "operationId": "create_study_api_v1_studies_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudyCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies/{study_id}": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Get Study",
+        "operationId": "get_study_api_v1_studies__study_id__get",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Update Study",
+        "operationId": "update_study_api_v1_studies__study_id__patch",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudyUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Delete Study",
+        "operationId": "delete_study_api_v1_studies__study_id__delete",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies/{study_id}/cohorts": {
+      "post": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Create Cohort",
+        "operationId": "create_cohort_api_v1_studies__study_id__cohorts_post",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CohortCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CohortRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "List Cohorts",
+        "operationId": "list_cohorts_api_v1_studies__study_id__cohorts_get",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CohortRead"
+                  },
+                  "title": "Response List Cohorts Api V1 Studies  Study Id  Cohorts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies/{study_id}/cohorts/{cohort_id}": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Get Cohort",
+        "operationId": "get_cohort_api_v1_studies__study_id__cohorts__cohort_id__get",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CohortRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Delete Cohort",
+        "operationId": "delete_cohort_api_v1_studies__study_id__cohorts__cohort_id__delete",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies/{study_id}/cohorts/{cohort_id}/enrollments": {
+      "post": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Enroll Mouse",
+        "operationId": "enroll_mouse_api_v1_studies__study_id__cohorts__cohort_id__enrollments_post",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrollmentCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "List Enrollments",
+        "operationId": "list_enrollments_api_v1_studies__study_id__cohorts__cohort_id__enrollments_get",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EnrollmentRead"
+                  },
+                  "title": "Response List Enrollments Api V1 Studies  Study Id  Cohorts  Cohort Id  Enrollments Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies/{study_id}/cohorts/{cohort_id}/enrollments/{enrollment_id}/remove": {
+      "post": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Remove Enrollment",
+        "operationId": "remove_enrollment_api_v1_studies__study_id__cohorts__cohort_id__enrollments__enrollment_id__remove_post",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          },
+          {
+            "name": "enrollment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Enrollment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrollmentRemove"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/studies/{study_id}/cohorts/{cohort_id}/enrollments/{enrollment_id}/measurements": {
+      "post": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Create Measurement",
+        "operationId": "create_measurement_api_v1_studies__study_id__cohorts__cohort_id__enrollments__enrollment_id__measurements_post",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          },
+          {
+            "name": "enrollment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Enrollment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeasurementCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "List Measurements",
+        "operationId": "list_measurements_api_v1_studies__study_id__cohorts__cohort_id__enrollments__enrollment_id__measurements_get",
+        "parameters": [
+          {
+            "name": "study_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Study Id"
+            }
+          },
+          {
+            "name": "cohort_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cohort Id"
+            }
+          },
+          {
+            "name": "enrollment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Enrollment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasurementRead"
+                  },
+                  "title": "Response List Measurements Api V1 Studies  Study Id  Cohorts  Cohort Id  Enrollments  Enrollment Id  Measurements Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CageAssign": {
+        "properties": {
+          "cage_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cage Id"
+          }
+        },
+        "type": "object",
+        "title": "CageAssign"
+      },
+      "CageCreate": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Capacity",
+            "default": 5
+          }
+        },
+        "type": "object",
+        "required": [
+          "label"
+        ],
+        "title": "CageCreate"
+      },
+      "CageRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "capacity": {
+            "type": "integer",
+            "title": "Capacity"
+          },
+          "occupancy": {
+            "type": "integer",
+            "title": "Occupancy",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "location",
+          "capacity"
+        ],
+        "title": "CageRead"
+      },
+      "CageUpdate": {
+        "properties": {
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "capacity": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capacity"
+          }
+        },
+        "type": "object",
+        "title": "CageUpdate"
+      },
+      "CohortCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CohortCreate"
+      },
+      "CohortRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "study_id": {
+            "type": "integer",
+            "title": "Study Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "study_id",
+          "name",
+          "description"
+        ],
+        "title": "CohortRead"
+      },
+      "EnrollmentCreate": {
+        "properties": {
+          "mouse_id": {
+            "type": "integer",
+            "title": "Mouse Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mouse_id"
+        ],
+        "title": "EnrollmentCreate"
+      },
+      "EnrollmentRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "cohort_id": {
+            "type": "integer",
+            "title": "Cohort Id"
+          },
+          "mouse_id": {
+            "type": "integer",
+            "title": "Mouse Id"
+          },
+          "enrolled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Enrolled At"
+          },
+          "removed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Removed At"
+          },
+          "removal_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Removal Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "cohort_id",
+          "mouse_id",
+          "enrolled_at",
+          "removed_at",
+          "removal_reason"
+        ],
+        "title": "EnrollmentRead"
+      },
+      "EnrollmentRemove": {
+        "properties": {
+          "removal_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Removal Reason"
+          }
+        },
+        "type": "object",
+        "title": "EnrollmentRemove"
+      },
+      "GenotypeCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "zygosity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zygosity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "GenotypeCreate"
+      },
+      "GenotypeRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "zygosity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zygosity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "zygosity"
+        ],
+        "title": "GenotypeRead"
+      },
+      "GenotypeUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "zygosity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zygosity"
+          }
+        },
+        "type": "object",
+        "title": "GenotypeUpdate"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LineageAssign": {
+        "properties": {
+          "sire_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sire Id"
+          },
+          "dam_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dam Id"
+          }
+        },
+        "type": "object",
+        "title": "LineageAssign"
+      },
+      "MeasurementCreate": {
+        "properties": {
+          "tumor_length_mm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tumor Length Mm"
+          },
+          "tumor_width_mm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tumor Width Mm"
+          },
+          "body_weight_g": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body Weight G"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "title": "MeasurementCreate"
+      },
+      "MeasurementRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "enrollment_id": {
+            "type": "integer",
+            "title": "Enrollment Id"
+          },
+          "recorded_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Recorded At"
+          },
+          "tumor_length_mm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tumor Length Mm"
+          },
+          "tumor_width_mm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tumor Width Mm"
+          },
+          "tumor_volume_mm3": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tumor Volume Mm3"
+          },
+          "body_weight_g": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body Weight G"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "enrollment_id",
+          "recorded_at",
+          "tumor_length_mm",
+          "tumor_width_mm",
+          "tumor_volume_mm3",
+          "body_weight_g",
+          "notes"
+        ],
+        "title": "MeasurementRead"
+      },
+      "MouseCreate": {
+        "properties": {
+          "ear_tag": {
+            "type": "string",
+            "title": "Ear Tag"
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "title": "Date Of Birth"
+          },
+          "genotype_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Genotype Id"
+          },
+          "cage_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cage Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ear_tag",
+          "sex",
+          "date_of_birth"
+        ],
+        "title": "MouseCreate"
+      },
+      "MouseRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "ear_tag": {
+            "type": "string",
+            "title": "Ear Tag"
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "title": "Date Of Birth"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MouseStatus"
+          },
+          "sire_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sire Id"
+          },
+          "dam_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dam Id"
+          },
+          "genotype_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Genotype Id"
+          },
+          "cage_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cage Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "ear_tag",
+          "sex",
+          "date_of_birth",
+          "status",
+          "sire_id",
+          "dam_id",
+          "genotype_id",
+          "cage_id"
+        ],
+        "title": "MouseRead"
+      },
+      "MouseStatus": {
+        "type": "string",
+        "enum": [
+          "Alive",
+          "Deceased",
+          "Culled"
+        ],
+        "title": "MouseStatus"
+      },
+      "MouseUpdate": {
+        "properties": {
+          "ear_tag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ear Tag"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MouseStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "genotype_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Genotype Id"
+          }
+        },
+        "type": "object",
+        "title": "MouseUpdate"
+      },
+      "PedigreeNode": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "ear_tag": {
+            "type": "string",
+            "title": "Ear Tag"
+          },
+          "sex": {
+            "$ref": "#/components/schemas/Sex"
+          },
+          "sire": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PedigreeNode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dam": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PedigreeNode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "ear_tag",
+          "sex"
+        ],
+        "title": "PedigreeNode"
+      },
+      "Sex": {
+        "type": "string",
+        "enum": [
+          "Male",
+          "Female"
+        ],
+        "title": "Sex"
+      },
+      "StudyCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "start_date"
+        ],
+        "title": "StudyCreate"
+      },
+      "StudyRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StudyStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "start_date",
+          "end_date",
+          "status"
+        ],
+        "title": "StudyRead"
+      },
+      "StudyStatus": {
+        "type": "string",
+        "enum": [
+          "Draft",
+          "Active",
+          "Completed"
+        ],
+        "title": "StudyStatus"
+      },
+      "StudyUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StudyStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          }
+        },
+        "type": "object",
+        "title": "StudyUpdate"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
