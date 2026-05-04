@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'screens/dashboard/dashboard_screen.dart';
 import 'screens/colony/mouse_list_screen.dart';
 import 'screens/colony/cage_list_screen.dart';
 import 'screens/study/study_list_screen.dart';
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   static const _screens = <Widget>[
+    DashboardScreen(),
     MouseListScreen(),
     CageListScreen(),
     StudyListScreen(),
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedIndex: _selectedIndex,
         onDestinationSelected: (i) => setState(() => _selectedIndex = i),
         destinations: const [
+          NavigationDestination(icon: Icon(Icons.dashboard), label: 'Dashboard'),
           NavigationDestination(icon: Icon(Icons.pets), label: 'Mice'),
           NavigationDestination(icon: Icon(Icons.grid_view), label: 'Cages'),
           NavigationDestination(icon: Icon(Icons.science), label: 'Studies'),

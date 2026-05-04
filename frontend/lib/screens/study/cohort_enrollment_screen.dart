@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/analytics_providers.dart';
 import '../../providers/colony_providers.dart';
 import '../../providers/study_providers.dart';
+import '../../widgets/charts/tumor_growth_chart.dart';
+import '../../widgets/charts/body_weight_chart.dart';
 import 'measurement_screen.dart';
 
 class CohortEnrollmentScreen extends ConsumerWidget {
@@ -29,6 +32,27 @@ class CohortEnrollmentScreen extends ConsumerWidget {
         data: (enrollments) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            // Analytics charts for this cohort
+            ref.watch(tumorGrowthProvider(studyId)).when(
+              data: (allCohorts) {
+                final filtered = allCohorts.where((c) => c.cohortId == cohortId).toList();
+                return filtered.isNotEmpty && filtered.first.series.isNotEmpty
+                    ? Padding(padding: const EdgeInsets.only(bottom: 16), child: TumorGrowthChart(data: filtered))
+                    : const SizedBox.shrink();
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
+            ),
+            ref.watch(bodyWeightProvider(studyId)).when(
+              data: (allCohorts) {
+                final filtered = allCohorts.where((c) => c.cohortId == cohortId).toList();
+                return filtered.isNotEmpty && filtered.first.series.isNotEmpty
+                    ? Padding(padding: const EdgeInsets.only(bottom: 16), child: BodyWeightChart(data: filtered))
+                    : const SizedBox.shrink();
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
+            ),
             Text('Enrollments (${enrollments.length})',
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),

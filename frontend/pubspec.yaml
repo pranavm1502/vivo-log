@@ -40,6 +40,7 @@ dependencies:
   openapi_generator_annotations: ^6.1.0
   share_plus: ^10.1.4
   path_provider: ^2.1.5
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
