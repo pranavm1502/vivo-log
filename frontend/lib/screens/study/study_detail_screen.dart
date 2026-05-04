@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../api/export_repository.dart';
 import '../../api/study_repository.dart';
+import '../../providers/analytics_providers.dart';
 import '../../providers/study_providers.dart';
+import '../../widgets/charts/tumor_growth_chart.dart';
+import '../../widgets/charts/body_weight_chart.dart';
 import '../../widgets/cohort_dialog.dart';
 import '../../widgets/crud_dialogs.dart';
 import '../../widgets/export_helper.dart';
@@ -141,6 +144,20 @@ class StudyDetailScreen extends ConsumerWidget {
                     ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => Text('Error: $e'),
+            ),
+            const SizedBox(height: 24),
+            Text('Analytics', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            ref.watch(tumorGrowthProvider(studyId)).when(
+              data: (data) => TumorGrowthChart(data: data),
+              loading: () => const SizedBox(height: 220, child: Center(child: CircularProgressIndicator())),
+              error: (e, _) => Text('Error loading tumor data: $e'),
+            ),
+            const SizedBox(height: 16),
+            ref.watch(bodyWeightProvider(studyId)).when(
+              data: (data) => BodyWeightChart(data: data),
+              loading: () => const SizedBox(height: 220, child: Center(child: CircularProgressIndicator())),
+              error: (e, _) => Text('Error loading weight data: $e'),
             ),
           ],
         ),
