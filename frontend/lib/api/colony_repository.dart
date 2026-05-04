@@ -16,6 +16,15 @@ class ColonyRepository {
     return Genotype.fromJson(r.data);
   }
 
+  Future<Genotype> updateGenotype(int id, Map<String, dynamic> data) async {
+    final r = await _dio.patch('/colony/genotypes/$id', data: data);
+    return Genotype.fromJson(r.data);
+  }
+
+  Future<void> deleteGenotype(int id) async {
+    await _dio.delete('/colony/genotypes/$id');
+  }
+
   // ── Cages ──
   Future<List<Cage>> getCages() async {
     final r = await _dio.get('/colony/cages');
@@ -30,6 +39,15 @@ class ColonyRepository {
   Future<Cage> createCage(Map<String, dynamic> data) async {
     final r = await _dio.post('/colony/cages', data: data);
     return Cage.fromJson(r.data);
+  }
+
+  Future<Cage> updateCage(int id, Map<String, dynamic> data) async {
+    final r = await _dio.patch('/colony/cages/$id', data: data);
+    return Cage.fromJson(r.data);
+  }
+
+  Future<void> deleteCage(int id) async {
+    await _dio.delete('/colony/cages/$id');
   }
 
   // ── Mice ──
@@ -54,6 +72,10 @@ class ColonyRepository {
   Future<Mouse> updateMouse(int id, Map<String, dynamic> data) async {
     final r = await _dio.patch('/colony/mice/$id', data: data);
     return Mouse.fromJson(r.data);
+  }
+
+  Future<void> deleteMouse(int id) async {
+    await _dio.delete('/colony/mice/$id');
   }
 
   Future<Mouse> assignLineage(int id, Map<String, dynamic> data) async {

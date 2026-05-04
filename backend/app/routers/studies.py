@@ -1,7 +1,8 @@
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -10,6 +11,7 @@ from app.models.study import Cohort, Enrollment, Measurement, Study, StudyStatus
 from app.schemas.study import (
     CohortCreate,
     CohortRead,
+    CohortUpdate,
     EnrollmentCreate,
     EnrollmentRead,
     EnrollmentRemove,
@@ -67,6 +69,18 @@ async def delete_study(study_id: int, db: AsyncSession = Depends(get_db)):
     study = await db.get(Study, study_id)
     if not study:
         raise HTTPException(status_code=404, detail="Study not found")
+    # Check if any cohorts in this study have enrollments
+    count = await db.scalar(
+        select(func.count())
+        .select_from(Enrollment)
+        .join(Cohort, Enrollment.cohort_id == Cohort.id)
+        .where(Cohort.study_id == study_id)
+    )
+    if count:
+        raise HTTPException(
+            status_code=409,
+            detail="Cannot delete study because it has active enrollments",
+        )
     await db.delete(study)
     await db.commit()
 
@@ -103,6 +117,23 @@ async def get_cohort(
     return cohort
 
 
+@router.patch("/{study_id}/cohorts/{cohort_id}", response_model=CohortRead)
+async def update_cohort(
+    study_id: int,
+    cohort_id: int,
+    body: CohortUpdate,
+    db: AsyncSession = Depends(get_db),
+):
+    cohort = await db.get(Cohort, cohort_id)
+    if not cohort or cohort.study_id != study_id:
+        raise HTTPException(status_code=404, detail="Cohort not found")
+    for field, value in body.model_dump(exclude_unset=True).items():
+        setattr(cohort, field, value)
+    await db.commit()
+    await db.refresh(cohort)
+    return cohort
+
+
 @router.delete("/{study_id}/cohorts/{cohort_id}", status_code=204)
 async def delete_cohort(
     study_id: int, cohort_id: int, db: AsyncSession = Depends(get_db)
@@ -110,6 +141,15 @@ async def delete_cohort(
     cohort = await db.get(Cohort, cohort_id)
     if not cohort or cohort.study_id != study_id:
         raise HTTPException(status_code=404, detail="Cohort not found")
+    # Check if cohort has enrollments
+    count = await db.scalar(
+        select(func.count()).where(Enrollment.cohort_id == cohort_id)
+    )
+    if count:
+        raise HTTPException(
+            status_code=409,
+            detail="Cannot delete cohort because it has enrollments",
+        )
     await db.delete(cohort)
     await db.commit()
 
@@ -262,3 +302,21 @@ async def list_measurements(
         .order_by(Measurement.recorded_at.asc())
     )
     return result.scalars().all()
+
+
+@router.delete(
+    "/{study_id}/cohorts/{cohort_id}/enrollments/{enrollment_id}/measurements/{measurement_id}",
+    status_code=204,
+)
+async def delete_measurement(
+    study_id: int,
+    cohort_id: int,
+    enrollment_id: int,
+    measurement_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    measurement = await db.get(Measurement, measurement_id)
+    if not measurement or measurement.enrollment_id != enrollment_id:
+        raise HTTPException(status_code=404, detail="Measurement not found")
+    await db.delete(measurement)
+    await db.commit()

@@ -41,7 +41,18 @@ class CohortEnrollmentScreen extends ConsumerWidget {
                       subtitle: Text(e.removedAt != null
                           ? 'Removed: ${e.removalReason ?? "N/A"}'
                           : 'Enrolled: ${e.enrolledAt}'),
-                      trailing: const Icon(Icons.chevron_right),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (e.removedAt == null)
+                            IconButton(
+                              icon: const Icon(Icons.person_remove, size: 20),
+                              tooltip: 'Remove from cohort',
+                              onPressed: () => _removeEnrollment(context, ref, e.id),
+                            ),
+                          const Icon(Icons.chevron_right),
+                        ],
+                      ),
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -100,6 +111,59 @@ class CohortEnrollmentScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mouse enrolled')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _removeEnrollment(
+      BuildContext context, WidgetRef ref, int enrollmentId) async {
+    final reason = await showDialog<String>(
+      context: context,
+      builder: (ctx) {
+        final controller = TextEditingController();
+        return AlertDialog(
+          title: const Text('Remove Enrollment'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: 'Reason (optional)',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, controller.text),
+              child: const Text('Remove'),
+            ),
+          ],
+        );
+      },
+    );
+    if (reason == null || !context.mounted) return;
+
+    try {
+      await ref.read(studyRepositoryProvider).removeEnrollment(
+            studyId,
+            cohortId,
+            enrollmentId,
+            reason.isEmpty ? null : reason,
+          );
+      ref.invalidate(
+          enrollmentsProvider((studyId: studyId, cohortId: cohortId)));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enrollment removed')),
         );
       }
     } catch (e) {
