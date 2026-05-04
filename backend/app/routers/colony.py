@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -67,6 +68,15 @@ async def delete_genotype(genotype_id: int, db: AsyncSession = Depends(get_db)):
     genotype = await db.get(Genotype, genotype_id)
     if not genotype:
         raise HTTPException(status_code=404, detail="Genotype not found")
+    # Check if any mice reference this genotype
+    count = await db.scalar(
+        select(func.count()).where(Mouse.genotype_id == genotype_id)
+    )
+    if count:
+        raise HTTPException(
+            status_code=409,
+            detail="Cannot delete genotype because it is assigned to one or more mice",
+        )
     await db.delete(genotype)
     await db.commit()
 
@@ -135,6 +145,15 @@ async def delete_cage(cage_id: int, db: AsyncSession = Depends(get_db)):
     cage = await db.get(Cage, cage_id)
     if not cage:
         raise HTTPException(status_code=404, detail="Cage not found")
+    # Check if any mice are in this cage
+    count = await db.scalar(
+        select(func.count()).where(Mouse.cage_id == cage_id)
+    )
+    if count:
+        raise HTTPException(
+            status_code=409,
+            detail="Cannot delete cage because it still contains mice",
+        )
     await db.delete(cage)
     await db.commit()
 
@@ -203,7 +222,14 @@ async def delete_mouse(mouse_id: int, db: AsyncSession = Depends(get_db)):
     if not mouse:
         raise HTTPException(status_code=404, detail="Mouse not found")
     await db.delete(mouse)
-    await db.commit()
+    try:
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Cannot delete mouse because it is referenced as a parent by other mice",
+        )
 
 
 # ── Lineage Assignment (3.4) ────────────────────────────────────────

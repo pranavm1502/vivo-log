@@ -26,6 +26,10 @@ class StudyRepository {
     return Study.fromJson(r.data);
   }
 
+  Future<void> deleteStudy(int id) async {
+    await _dio.delete('/studies/$id');
+  }
+
   // ── Cohorts ──
   Future<List<Cohort>> getCohorts(int studyId) async {
     final r = await _dio.get('/studies/$studyId/cohorts');
@@ -35,6 +39,15 @@ class StudyRepository {
   Future<Cohort> createCohort(int studyId, Map<String, dynamic> data) async {
     final r = await _dio.post('/studies/$studyId/cohorts', data: data);
     return Cohort.fromJson(r.data);
+  }
+
+  Future<Cohort> updateCohort(int studyId, int cohortId, Map<String, dynamic> data) async {
+    final r = await _dio.patch('/studies/$studyId/cohorts/$cohortId', data: data);
+    return Cohort.fromJson(r.data);
+  }
+
+  Future<void> deleteCohort(int studyId, int cohortId) async {
+    await _dio.delete('/studies/$studyId/cohorts/$cohortId');
   }
 
   // ── Enrollments ──
@@ -76,5 +89,12 @@ class StudyRepository {
       data: data,
     );
     return Measurement.fromJson(r.data);
+  }
+
+  Future<void> deleteMeasurement(
+      int studyId, int cohortId, int enrollmentId, int measurementId) async {
+    await _dio.delete(
+      '/studies/$studyId/cohorts/$cohortId/enrollments/$enrollmentId/measurements/$measurementId',
+    );
   }
 }

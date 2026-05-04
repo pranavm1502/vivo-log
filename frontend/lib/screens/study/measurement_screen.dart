@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../api/study_repository.dart';
 import '../../providers/study_providers.dart';
+import '../../widgets/crud_dialogs.dart';
 
 class MeasurementScreen extends ConsumerStatefulWidget {
   final int studyId;
@@ -153,6 +155,7 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
                         DataColumn(label: Text('Volume')),
                         DataColumn(label: Text('Weight')),
                         DataColumn(label: Text('Notes')),
+                        DataColumn(label: Text('')),
                       ],
                       rows: measurements
                           .map((m) => DataRow(cells: [
@@ -164,6 +167,28 @@ class _MeasurementScreenState extends ConsumerState<MeasurementScreen> {
                                 DataCell(Text(
                                     m.bodyWeightG?.toStringAsFixed(1) ?? '-')),
                                 DataCell(Text(m.notes ?? '')),
+                                DataCell(IconButton(
+                                  icon: const Icon(Icons.delete, size: 18),
+                                  onPressed: () async {
+                                    final deleted = await showDeleteConfirmation(
+                                      context,
+                                      entityName: 'measurement from ${m.recordedAt.substring(0, 10)}',
+                                      onDelete: () => StudyRepository().deleteMeasurement(
+                                        widget.studyId,
+                                        widget.cohortId,
+                                        widget.enrollmentId,
+                                        m.id,
+                                      ),
+                                    );
+                                    if (deleted) {
+                                      ref.invalidate(measurementsProvider((
+                                        studyId: widget.studyId,
+                                        cohortId: widget.cohortId,
+                                        enrollmentId: widget.enrollmentId,
+                                      )));
+                                    }
+                                  },
+                                )),
                               ]))
                           .toList(),
                     ),

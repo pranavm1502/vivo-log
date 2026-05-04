@@ -39,6 +39,11 @@ class CohortCreate(BaseModel):
     description: str | None = None
 
 
+class CohortUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+
+
 class CohortRead(BaseModel):
     id: int
     study_id: int

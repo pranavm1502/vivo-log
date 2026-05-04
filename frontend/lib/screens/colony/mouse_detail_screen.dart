@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/colony_providers.dart';
-import '../../api/colony_repository.dart';
 import '../../widgets/pedigree_widget.dart';
 
 class MouseDetailScreen extends ConsumerStatefulWidget {

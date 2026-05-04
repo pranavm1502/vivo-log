@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../models/colony_models.dart';
+import '../../api/colony_repository.dart';
+import '../../api/export_repository.dart';
 import '../../providers/colony_providers.dart';
+import '../../widgets/crud_dialogs.dart';
+import '../../widgets/export_helper.dart';
 import 'mouse_detail_screen.dart';
+import 'mouse_form_screen.dart';
 
 class MouseListScreen extends ConsumerStatefulWidget {
   const MouseListScreen({super.key});
@@ -23,7 +27,20 @@ class _MouseListScreenState extends ConsumerState<MouseListScreen> {
     final genotypesAsync = ref.watch(genotypesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mice')),
+      appBar: AppBar(
+        title: const Text('Mice'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.download),
+            tooltip: 'Export',
+            onPressed: () => showExportDialog(
+              context,
+              title: 'mice',
+              fetchData: (fmt) => ExportRepository().exportMice(format: fmt),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           // Filter bar
@@ -88,7 +105,26 @@ class _MouseListScreenState extends ConsumerState<MouseListScreen> {
                         return ListTile(
                           title: Text(m.earTag),
                           subtitle: Text('${m.sex} · ${m.status}'),
-                          trailing: Text(m.dateOfBirth),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(m.dateOfBirth),
+                              IconButton(
+                                icon: const Icon(Icons.delete, size: 20),
+                                onPressed: () async {
+                                  final deleted = await showDeleteConfirmation(
+                                    context,
+                                    entityName: m.earTag,
+                                    onDelete: () => ColonyRepository().deleteMouse(m.id),
+                                  );
+                                  if (deleted) {
+                                    ref.invalidate(miceProvider);
+                                    ref.invalidate(allMiceProvider);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -103,6 +139,19 @@ class _MouseListScreenState extends ConsumerState<MouseListScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push<bool>(
+            context,
+            MaterialPageRoute(builder: (_) => const MouseFormScreen()),
+          );
+          if (result == true) {
+            ref.invalidate(miceProvider);
+            ref.invalidate(allMiceProvider);
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

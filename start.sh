@@ -24,8 +24,12 @@ echo "==> Running database migrations..."
 alembic upgrade head
 
 echo "==> Starting backend API server..."
+# Kill any stale process on port 8000
+lsof -ti:8000 | xargs kill -9 2>/dev/null || true
+sleep 1
 uvicorn app.main:app --reload --port 8000 &
 BACKEND_PID=$!
+sleep 2
 echo "    Backend running (PID $BACKEND_PID) at http://localhost:8000"
 
 echo "==> Setting up frontend..."
