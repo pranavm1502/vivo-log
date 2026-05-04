@@ -1,93 +1,112 @@
 ## ADDED Requirements
 
-### Requirement: Create and manage studies
-The system SHALL allow users to create studies with a name, description, start date, and optional end date. A study SHALL have a status of "Draft", "Active", or "Completed". Only "Active" studies SHALL accept new enrollments.
+### Requirement: Create study from the app
+The system SHALL provide a form in the Flutter app to create a new study with name, description, and start date. The form SHALL validate that name is not empty.
 
-#### Scenario: Create a new study
-- **WHEN** user creates a study named "Tumor Growth Efficacy Study" with start date "2026-03-01"
-- **THEN** the system creates the study with status "Draft" and returns the study identifier
+#### Scenario: Create study via form
+- **WHEN** user fills in study name "PD-L1 Blockade Study", description "Evaluating anti-PD-L1 efficacy", start date "2026-05-01" and submits
+- **THEN** the system creates the study with status "Draft" and shows it in the study list
 
-#### Scenario: Activate a study
-- **WHEN** user changes study status from "Draft" to "Active"
-- **THEN** the study accepts new cohort and enrollment operations
+#### Scenario: Reject empty study name
+- **WHEN** user attempts to submit the study form with an empty name
+- **THEN** the form shows a validation error "Name is required"
 
-#### Scenario: Reject enrollment in a non-active study
-- **WHEN** user attempts to enroll a mouse into a cohort of a study with status "Draft"
-- **THEN** the system rejects the request with an error indicating the study must be "Active"
+### Requirement: Edit study from the app
+The system SHALL provide a form in the Flutter app to edit an existing study's name, description, start date, end date, and status. The form SHALL be pre-filled with current values.
 
-### Requirement: Define cohorts within a study
-The system SHALL allow creating named cohorts within a study (e.g., "Vehicle Control", "Treatment 10mg/kg"). Each cohort belongs to exactly one study.
+#### Scenario: Edit study to activate it
+- **WHEN** user opens edit form for a "Draft" study and changes status to "Active" and submits
+- **THEN** the system updates the study status and the study now accepts enrollments
 
-#### Scenario: Create a cohort
-- **WHEN** user creates cohort "Vehicle Control" within study "Tumor Growth Efficacy Study"
-- **THEN** the system creates the cohort linked to that study
+#### Scenario: Edit study end date
+- **WHEN** user opens edit form for an active study and sets end date to "2026-08-01" and submits
+- **THEN** the system updates the end date
 
-#### Scenario: List cohorts for a study
-- **WHEN** user requests all cohorts for study "Tumor Growth Efficacy Study"
-- **THEN** the system returns all cohorts belonging to that study
+### Requirement: Delete study from the app with confirmation
+The system SHALL allow users to delete a study from the app. If the study has cohorts with enrollments, the system SHALL show an error explaining the constraint.
 
-### Requirement: Enroll mice into cohorts
-The system SHALL allow enrolling a mouse into a cohort with a timestamp. A mouse SHALL NOT be enrolled if its status is "Deceased" or "Culled". A mouse MAY be enrolled in multiple cohorts across different studies.
+#### Scenario: Delete draft study with no cohorts
+- **WHEN** user taps delete on a "Draft" study with no cohorts and confirms
+- **THEN** the system deletes the study and removes it from the list
 
-#### Scenario: Successfully enroll an alive mouse
-- **GIVEN** mouse "M-001" has status "Alive"
-- **WHEN** user enrolls mouse "M-001" into cohort "Vehicle Control"
-- **THEN** the system records the enrollment with the current timestamp
+#### Scenario: Reject delete of study with enrollments
+- **WHEN** user taps delete on a study that has cohorts with active enrollments and confirms
+- **THEN** the system shows an error "Cannot delete study because it has active enrollments"
 
-#### Scenario: Reject enrollment of a deceased mouse
-- **GIVEN** mouse "M-002" has status "Deceased"
-- **WHEN** user attempts to enroll mouse "M-002" into cohort "Vehicle Control"
-- **THEN** the system rejects the enrollment with an error indicating deceased mice cannot be enrolled
+### Requirement: Create cohort from the app
+The system SHALL provide a form in the Flutter app to create a new cohort within a study. The form SHALL require a cohort name.
 
-#### Scenario: Reject enrollment of a culled mouse
-- **GIVEN** mouse "M-003" has status "Culled"
-- **WHEN** user attempts to enroll mouse "M-003" into cohort "Treatment 10mg/kg"
-- **THEN** the system rejects the enrollment with an error indicating culled mice cannot be enrolled
+#### Scenario: Create cohort via form
+- **WHEN** user navigates to an active study and taps "Add Cohort", fills in name "High Dose 20mg/kg" and submits
+- **THEN** the system creates the cohort and shows it in the study's cohort list
 
-#### Scenario: Remove a mouse from a cohort
-- **WHEN** user removes mouse "M-001" from cohort "Vehicle Control" with reason "Reached humane endpoint"
-- **THEN** the system records the removal timestamp and reason, and the mouse is no longer actively enrolled in that cohort
+### Requirement: Edit cohort from the app
+The system SHALL provide a form in the Flutter app to edit an existing cohort's name. The form SHALL be pre-filled with the current name.
 
-### Requirement: Record experimental measurements
-The system SHALL allow recording timestamped measurements for an enrolled mouse including tumor length (mm), tumor width (mm), and body weight (g). All measurement values MUST be non-negative numbers.
+#### Scenario: Edit cohort name
+- **WHEN** user opens edit form for cohort "Vehicle Control" and changes name to "Saline Control" and submits
+- **THEN** the system updates the cohort name
 
-#### Scenario: Record a complete measurement
-- **WHEN** user records a measurement for enrolled mouse "M-001" with tumor length 12.5 mm, tumor width 8.3 mm, and body weight 22.1 g
-- **THEN** the system stores the measurement with the provided values and the recording timestamp
+### Requirement: Delete cohort from the app with confirmation
+The system SHALL allow users to delete a cohort. If the cohort has enrollments, the system SHALL show an error.
 
-#### Scenario: Record body weight only
-- **WHEN** user records a measurement for enrolled mouse "M-001" with only body weight 21.8 g (no tumor dimensions)
-- **THEN** the system stores the measurement with body weight and null tumor dimensions
+#### Scenario: Delete empty cohort
+- **WHEN** user taps delete on a cohort with no enrollments and confirms
+- **THEN** the system deletes the cohort and removes it from the study detail view
 
-#### Scenario: Reject negative measurement values
-- **WHEN** user attempts to record a measurement with tumor length -5.0 mm
-- **THEN** the system rejects the request with a validation error indicating measurements must be non-negative
+#### Scenario: Reject delete of cohort with enrollments
+- **WHEN** user taps delete on a cohort with active enrollments and confirms
+- **THEN** the system shows an error "Cannot delete cohort because it has enrollments"
 
-### Requirement: Calculate tumor volume automatically
-The system SHALL automatically calculate tumor volume using the formula Volume = Length × Width² / 2 whenever both tumor length and tumor width are provided in a measurement. The calculated volume SHALL be stored alongside the raw dimensions. If either dimension is missing, the tumor volume SHALL be null.
+### Requirement: Enroll mouse from the app
+The system SHALL provide a UI to enroll a mouse into a cohort directly from the cohort detail screen. The UI SHALL show only eligible mice (status "Alive") and exclude already-enrolled mice.
 
-#### Scenario: Tumor volume calculated from dimensions
-- **GIVEN** a measurement is being recorded with tumor length 12.5 mm and tumor width 8.3 mm
-- **WHEN** the measurement is saved
-- **THEN** the system calculates tumor volume as 12.5 × 8.3² / 2 = 430.5625 mm³ and stores it with the measurement
+#### Scenario: Enroll mouse via UI
+- **WHEN** user taps "Enroll Mouse" on a cohort, selects mouse "M-005" from the eligible list, and confirms
+- **THEN** the system creates the enrollment and shows the mouse in the cohort's enrollment list
 
-#### Scenario: Tumor volume is null when width is missing
-- **GIVEN** a measurement is being recorded with tumor length 12.5 mm and no tumor width
-- **WHEN** the measurement is saved
-- **THEN** the tumor volume is stored as null
+### Requirement: Remove enrollment from the app
+The system SHALL provide a UI to remove a mouse from a cohort with an optional reason. The removal SHALL record the timestamp and reason.
 
-#### Scenario: Tumor volume is null when length is missing
-- **GIVEN** a measurement is being recorded with tumor width 8.3 mm and no tumor length
-- **WHEN** the measurement is saved
-- **THEN** the tumor volume is stored as null
+#### Scenario: Remove enrollment via UI
+- **WHEN** user taps "Remove" on an enrolled mouse and enters reason "Reached humane endpoint" and confirms
+- **THEN** the system records the removal with timestamp and reason, and marks the enrollment as removed
 
-### Requirement: View measurement history for an enrollment
-The system SHALL provide a chronological list of all measurements recorded for a given enrollment, ordered by recording timestamp.
+### Requirement: Add measurement from the app
+The system SHALL provide a form to record a measurement for an enrolled mouse with fields for tumor length, tumor width, and body weight. The tumor volume SHALL be previewed in real-time.
 
-#### Scenario: Retrieve measurement history
-- **WHEN** user requests measurements for the enrollment of mouse "M-001" in cohort "Vehicle Control"
-- **THEN** the system returns all measurements for that enrollment ordered by timestamp ascending
+#### Scenario: Record measurement via form
+- **WHEN** user opens measurement form for enrollment of mouse "M-001", enters tumor length 15.2, tumor width 9.1, body weight 23.4 and submits
+- **THEN** the system records the measurement with calculated tumor volume and shows it in the measurement history
 
-#### Scenario: No measurements recorded yet
-- **WHEN** user requests measurements for a newly created enrollment with no recorded data
-- **THEN** the system returns an empty list
+### Requirement: Delete measurement from the app
+The system SHALL allow users to delete a measurement with confirmation. This is for correcting data entry errors.
+
+#### Scenario: Delete measurement with confirmation
+- **WHEN** user taps delete on a measurement record and confirms
+- **THEN** the system deletes the measurement and removes it from the history list
+
+### Requirement: Backend supports cohort update
+The system SHALL provide a PATCH endpoint to update a cohort's name.
+
+#### Scenario: Update cohort name via API
+- **WHEN** a PATCH request is made to `/api/v1/studies/{study_id}/cohorts/{cohort_id}` with body `{"name": "New Name"}`
+- **THEN** the server updates the cohort name and returns the updated cohort
+
+### Requirement: Backend supports measurement deletion
+The system SHALL provide a DELETE endpoint to remove a measurement record.
+
+#### Scenario: Delete measurement via API
+- **WHEN** a DELETE request is made to `/api/v1/studies/{study_id}/cohorts/{cohort_id}/enrollments/{enrollment_id}/measurements/{measurement_id}`
+- **THEN** the server deletes the measurement and returns 204 No Content
+
+### Requirement: Backend returns 409 on study-related constraint violations
+The system SHALL return HTTP 409 Conflict when a delete operation on a study, cohort, or enrollment fails due to dependencies.
+
+#### Scenario: Delete study with cohorts returns 409
+- **WHEN** a DELETE request is made to `/api/v1/studies/{id}` for a study with cohorts that have enrollments
+- **THEN** the server returns 409 with body `{"detail": "Cannot delete study because it has active enrollments"}`
+
+#### Scenario: Delete cohort with enrollments returns 409
+- **WHEN** a DELETE request is made to `/api/v1/studies/{study_id}/cohorts/{cohort_id}` for a cohort with enrollments
+- **THEN** the server returns 409 with body `{"detail": "Cannot delete cohort because it has enrollments"}`
