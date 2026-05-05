@@ -42,12 +42,12 @@
 - [x] 6.1 Configure Application Support path: `~/Library/Application Support/Vivo-Log/db/` for postgres data
 - [x] 6.2 Configure log directory: `~/Library/Application Support/Vivo-Log/logs/`
 - [x] 6.3 Ensure Alembic migrations run on each app start (include migration files in PyInstaller bundle)
-- [ ] 6.4 Test data persistence: create data, quit app, relaunch, verify data intact
+- [x] 6.4 Test data persistence: create data, quit app, relaunch, verify data intact
 
 ## 7. Testing and Validation
 
-- [ ] 7.1 Test first launch on a clean machine (no dev tools installed)
-- [ ] 7.2 Test that quitting the app leaves no orphan processes
-- [ ] 7.3 Test DMG install: drag to Applications, eject DMG, launch from Applications
-- [ ] 7.4 Test port conflict scenario: run postgres on 5432, verify app uses 5433 without issues
-- [ ] 7.5 Test app launch when previous session crashed (stale lock file recovery)
+- [x] 7.1 Test first launch on a clean machine (no dev tools installed)
+- [x] 7.2 Test that quitting the app leaves no orphan processes
+- [x] 7.3 Test DMG install: drag to Applications, eject DMG, launch from Applications
+- [x] 7.4 Test port conflict scenario: run postgres on 5432, verify app uses 5433 without issues
+- [x] 7.5 Test app launch when previous session crashed (stale lock file recovery)
