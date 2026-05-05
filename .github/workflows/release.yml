@@ -1,0 +1,145 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - runner: macos-14
+            arch: arm64
+            suffix: apple-silicon
+          - runner: macos-13
+            arch: x86_64
+            suffix: intel
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt pyinstaller
+
+      - name: Install PostgreSQL 15
+        run: |
+          brew install postgresql@15 krb5 icu4c
+
+      - name: Bundle PostgreSQL binaries
+        run: |
+          BREW_PREFIX=$(brew --prefix)
+          PG_PREFIX=$(brew --prefix postgresql@15)
+          KRB5_PREFIX=$(brew --prefix krb5)
+          ICU_PREFIX=$(brew --prefix icu4c)
+          SSL_PREFIX=$(brew --prefix openssl@3)
+          GETTEXT_PREFIX=$(brew --prefix gettext)
+          ZSTD_PREFIX=$(brew --prefix zstd)
+          LZ4_PREFIX=$(brew --prefix lz4)
+
+          mkdir -p packaging/postgres/bin packaging/postgres/lib packaging/postgres/share
+
+          # Copy binaries
+          cp "$PG_PREFIX/bin/postgres" packaging/postgres/bin/
+          cp "$PG_PREFIX/bin/initdb" packaging/postgres/bin/
+          cp "$PG_PREFIX/bin/pg_ctl" packaging/postgres/bin/
+          cp "$PG_PREFIX/bin/pg_isready" packaging/postgres/bin/
+
+          # Copy libraries
+          cp "$GETTEXT_PREFIX/lib/libintl."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$ZSTD_PREFIX/lib/libzstd."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$LZ4_PREFIX/lib/liblz4."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$SSL_PREFIX/lib/libssl."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$SSL_PREFIX/lib/libcrypto."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$KRB5_PREFIX/lib/libgssapi_krb5."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$KRB5_PREFIX/lib/libkrb5."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$KRB5_PREFIX/lib/libk5crypto."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$KRB5_PREFIX/lib/libcom_err."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$KRB5_PREFIX/lib/libkrb5support."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$ICU_PREFIX/lib/libicui18n."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$ICU_PREFIX/lib/libicuuc."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$ICU_PREFIX/lib/libicudata."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+          cp "$PG_PREFIX/lib/libpq."*.dylib packaging/postgres/lib/ 2>/dev/null || true
+
+          # Copy share data for initdb
+          cp -R "$PG_PREFIX/share/postgresql@15/"* packaging/postgres/share/ 2>/dev/null || \
+          cp -R "$PG_PREFIX/share/"* packaging/postgres/share/ 2>/dev/null || true
+
+          # Fix permissions
+          chmod u+w packaging/postgres/bin/* packaging/postgres/lib/*
+
+      - name: Build app
+        run: bash build.sh
+
+      - name: Rename DMG with architecture suffix
+        run: mv dist/Vivo-Log.dmg "dist/Vivo-Log-${{ matrix.suffix }}.dmg"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmg-${{ matrix.suffix }}
+          path: dist/Vivo-Log-${{ matrix.suffix }}.dmg
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Generate version tag
+        id: version
+        run: |
+          VERSION="v$(date +%Y.%m.%d)-$(git rev-parse --short HEAD)"
+          echo "tag=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "Vivo-Log ${{ steps.version.outputs.tag }}"
+          body: |
+            Automated release from main branch.
+
+            **Commit:** ${{ github.sha }}
+            **Message:** ${{ github.event.head_commit.message }}
+
+            ### Downloads
+            - `Vivo-Log-apple-silicon.dmg` — for M1/M2/M3/M4 Macs
+            - `Vivo-Log-intel.dmg` — for Intel Macs
+
+            ### Installation
+            1. Download the correct DMG for your Mac
+            2. Open DMG, drag to Applications
+            3. Right-click → Open → Open (first launch only)
+
+            _macOS 13+ required. Not code-signed._
+          files: |
+            dist/Vivo-Log-apple-silicon.dmg
+            dist/Vivo-Log-intel.dmg
+          generate_release_notes: true
