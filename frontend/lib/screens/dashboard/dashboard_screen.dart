@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dio/dio.dart';
 import '../../models/analytics_models.dart';
 import '../../providers/analytics_providers.dart';
 import '../study/study_detail_screen.dart';
@@ -18,15 +19,21 @@ class DashboardScreen extends ConsumerWidget {
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (studies) {
           if (studies.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.analytics_outlined, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('No active studies', style: TextStyle(fontSize: 18, color: Colors.grey)),
-                  SizedBox(height: 8),
-                  Text('Create a study and mark it as Active to see analytics here.', style: TextStyle(color: Colors.grey)),
+                  const Icon(Icons.analytics_outlined, size: 64, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  const Text('No active studies', style: TextStyle(fontSize: 18, color: Colors.grey)),
+                  const SizedBox(height: 8),
+                  const Text('Create a study and mark it as Active to see analytics here.', style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.download),
+                    label: const Text('Load Demo Data'),
+                    onPressed: () => _loadDemoData(context, ref),
+                  ),
                 ],
               ),
             );
@@ -42,6 +49,33 @@ class DashboardScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  Future<void> _loadDemoData(BuildContext context, WidgetRef ref) async {
+    try {
+      final dio = Dio(BaseOptions(baseUrl: 'http://127.0.0.1:8000'));
+      final resp = await dio.post('/api/v1/seed/demo-data');
+      if (resp.data['seeded'] == true) {
+        ref.invalidate(dashboardProvider);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Demo data loaded! Explore the app.')),
+          );
+        }
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(resp.data['message'] ?? 'Already seeded')),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load demo data: $e')),
+        );
+      }
+    }
   }
 }
 

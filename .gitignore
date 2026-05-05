@@ -18,6 +18,11 @@ build/
 # macOS
 .DS_Store
 
+# Packaging (bundled binaries - extracted from Homebrew at build time)
+packaging/postgres/bin/
+packaging/postgres/lib/
+packaging/postgres/share/
+
 # Flutter
 frontend/.dart_tool/
 frontend/build/

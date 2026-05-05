@@ -42,7 +42,10 @@ class StudyDetailScreen extends ConsumerWidget {
                   context,
                   MaterialPageRoute(builder: (_) => StudyFormScreen(existing: study)),
                 );
-                if (result == true) ref.invalidate(studyProvider(studyId));
+                if (result == true) {
+                  ref.invalidate(studyProvider(studyId));
+                  ref.invalidate(studiesProvider);
+                }
               },
             ),
             loading: () => const SizedBox.shrink(),
